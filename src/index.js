@@ -2,12 +2,12 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import { ThemeProvider } from '@material-ui/styles'
-import  CssBaseline from '@material-ui/core/CssBaseline'
+import CssBaseline from '@material-ui/core/CssBaseline'
 import theme from './muiTheme'
 
 ReactDOM.render(
     <ThemeProvider theme={theme}>
-        <CssBaseline/>
+        <CssBaseline />
         <App />
     </ThemeProvider>
     , document.getElementById('root'));

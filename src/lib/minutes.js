@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/styles'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(3, 2),
+        padding: theme && theme.spacing ? theme.spacing(3, 2) : '10px',
     },
 }))
 
@@ -36,7 +36,9 @@ const Minutes = (props) => {
             <TextField
                 id="outlined-number"
                 label="Every minute(s)"
-                value={value[1].split('/')[1]} min={1} max={60}
+                value={value[1] !== "" ? value[1].split('/')[1] : ""}
+                min={1}
+                max={60}
                 onChange={e => onChange(e)}
                 type="number"
                 InputLabelProps={{

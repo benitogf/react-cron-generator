@@ -19,10 +19,10 @@
   ],
   "author": "Mayer Lench",
   "dependencies": {
-    "@material-ui/core": "^4.5.1",
-    "@material-ui/icons": "^4.5.1",
-    "@material-ui/styles": "^4.5.0",
-    "cronstrue": "^1.72.0",
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/styles": "^4.11.2",
+    "cronstrue": "^1.106.0",
     "ramda": "^0.26.1"
   },
   "main": "dist/index.js",
@@ -36,14 +36,14 @@
     "url": "https://github.com/dealmeddevs/react-cron-generator.git"
   },
   "devDependencies": {
-    "@babel/cli": "^7.4.4",
-    "@babel/core": "^7.4.4",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/runtime": "^7.5.1",
-    "dotenv-cli": "^3.0.0",
-    "react": "^16.8.6",
-    "react-dom": "^16.8.6",
-    "react-scripts": "^3.0.0"
+    "@babel/cli": "^7.12.10",
+    "@babel/core": "^7.12.10",
+    "@babel/preset-react": "^7.12.10",
+    "@babel/runtime": "^7.12.5",
+    "dotenv-cli": "^3.2.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
+    "react-scripts": "^3.4.4"
   },
   "peerDependencies": {
     "cronstrue": "^1.72.0",

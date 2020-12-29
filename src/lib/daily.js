@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from 'react'
-import { range } from 'ramda'
+import React, { useState, useEffect, Fragment } from 'react'
 import Paper from '@material-ui/core/Paper'
 import TextField from '@material-ui/core/TextField'
 import FormControlLabel from '@material-ui/core/FormControlLabel'
@@ -10,10 +9,10 @@ import Card from './card'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(3, 2),
+        padding: theme && theme.spacing ? theme.spacing(3, 2) : '10px',
     },
     secondaryPaper: {
-        padding: theme.spacing(3, 2),
+        padding: theme && theme.spacing ? theme.spacing(3, 2) : '10px',
         marginTop: '20px'
     },
     radioBtn: {
@@ -27,23 +26,17 @@ const Daily = (props) => {
 
     useEffect(() => {
         setValue(props.value)
-
     }, [props.value])
 
     useEffect(() => {
-        const value = props.value
-        if (value[3] === '?') {
-            setEvery(false)
-        } else {
-            setEvery(true)
-        }
-    }, [])
+        setEvery(props.value[3] !== '?')
+    }, [props.value])
 
     const onDayChange = (e) => {
-        if ((e.target.value > 0 && e.target.value < 32) || e.target.value === '') {
+        if (e.target.value > 0 || e.target.value === '') {
             let val = ['0', value[1] === '*' ? '0' : value[1], value[2] === '*' ? '0' : value[2], '*', '*', '?', '*'];
             if (e.target.value === '') {
-                val[3] = '';
+                val[3] = '1/1';
             } else {
                 val[3] = `1/${e.target.value}`;
             }
@@ -63,52 +56,50 @@ const Daily = (props) => {
     }
 
     const classes = useStyles()
-    return (
-        <div>
-            <Paper className={classes.root}>
-                <Radio
-                    className={classes.radioBtn}
-                    checked={every ? true : false}
-                    onClick={(e) => { setEvery(true); props.onChange() }}
-                    value="1"
+    return (<Fragment>
+        <Paper className={classes.root}>
+            <Radio
+                className={classes.radioBtn}
+                checked={every ? true : false}
+                onClick={(e) => { setEvery(true); props.onChange() }}
+                value="1"
+                name="DailyRadio"
+                inputProps={{ 'aria-label': 'DailyRadio' }}
+            />
+            <TextField
+                id="outlined-number"
+                label="Every day(s)"
+                value={value[3].split('/')[1] ? value[3].split('/')[1] : ''}
+                onChange={onDayChange}
+                type="number"
+                InputLabelProps={{
+                    disabled: every ? false : true,
+                    shrink: true,
+                }}
+                margin="normal"
+                variant="outlined"
+            />
+        </Paper>
+        <Paper className={classes.secondaryPaper}>
+            <FormControlLabel
+                value="top"
+                control={<Radio
+                    onClick={(e) => { setEvery(false); props.onChange(['0', value[1], value[2], '?', '*', 'MON-FRI', '*']) }}
+                    value="2"
                     name="DailyRadio"
+                    checked={every ? false : true}
                     inputProps={{ 'aria-label': 'DailyRadio' }}
-                />
-                <TextField
-                    id="outlined-number"
-                    label="Every day(s)"
-                    value={value[3].split('/')[1] ? value[3].split('/')[1] : ''}
-                    onChange={onDayChange}
-                    type="number"
-                    InputLabelProps={{
-                        disabled: every ? false : true,
-                        shrink: true,
-                    }}
-                    margin="normal"
-                    variant="outlined"
-                />
-            </Paper>
-            <Paper className={classes.secondaryPaper}>
-                <FormControlLabel
-                    value="top"
-                    control={<Radio
-                        onClick={(e) => { setEvery(false); props.onChange(['0', value[1], value[2], '?', '*', 'MON-FRI', '*']) }}
-                        value="2"
-                        name="DailyRadio"
-                        checked={every ? false : true}
-                        inputProps={{ 'aria-label': 'DailyRadio' }}
-                    />}
-                    label="Every week day"
-                    labelPlacement="right"
-                />
+                />}
+                label="Every week day"
+                labelPlacement="start"
+            />
 
-            </Paper>
-        
-            <Card label="Start time">
-                <StartTime hour={value[2]} minute={value[1]} onAtMinuteChange={onAtMinuteChange} onAtHourChange={onAtHourChange} />
-            </Card>
-        </div>
-    )
+        </Paper>
+
+        <Card label="HH/MM (24h)">
+            <StartTime hour={value[2]} minute={value[1]} onAtMinuteChange={onAtMinuteChange} onAtHourChange={onAtHourChange} />
+        </Card>
+    </Fragment>)
 }
 
 export default Daily

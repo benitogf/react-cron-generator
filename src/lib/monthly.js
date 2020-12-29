@@ -9,10 +9,10 @@ import Card from './card'
 
 const useStyles = makeStyles(theme => ({
     root: {
-        padding: theme.spacing(3, 2),
+        padding: theme && theme.spacing ? theme.spacing(3, 2) : '10px',
     },
     secondaryPaper: {
-        padding: theme.spacing(3, 2),
+        padding: theme && theme.spacing ? theme.spacing(3, 2) : '10px',
         marginTop: '20px'
     },
     radioBtn: {
@@ -29,22 +29,28 @@ const Monthly = (props) => {
     }, [props.value])
 
     useEffect(() => {
-        const { value } = props
-        if (value[3] === 'L')
+        if (props.value[3] === 'L') {
             setEvery("2")
-        else if (value[3] === 'LW')
+        } else if (props.value[3] === 'LW') {
             setEvery("3")
-        else if (value[3].startsWith('L'))
+        } else if (props.value[3].startsWith('L')) {
             setEvery("4")
-        else
-            setEvery("2")
-    }, [])
+        } else {
+            setEvery("1")
+        }
+    }, [props.value])
 
 
     const onDayChange = (e) => {
         if (((parseInt(e.target.value) > 0 && parseInt(e.target.value) <= 31)) || e.target.value === "") {
-            let val = ['0', value[1] === '*' ? '0' : value[1], value[2] === '*' ? '0' : value[2], value[3], '1/1', '?', '*'];
-            val[3] = `${e.target.value}`;
+            let val = ['0',
+                value[1] === '*' ? '0' : value[1],
+                value[2] === '*' ? '0' : value[2],
+                value[3],
+                '1/1',
+                '?',
+                '*'];
+            val[3] = e.target.value !== "" ? `${e.target.value}` : '1';
             props.onChange(val)
         }
     }
@@ -52,7 +58,7 @@ const Monthly = (props) => {
         if (((parseInt(e.target.value) >> 0 && parseInt(e.target.value) <= 31)) || e.target.value === "") {
             let val = ['0', value[1] === '*' ? '0' : value[1], value[2] === '*' ? '0' : value[2], value[3], '1/1', '?', '*'];
             if (e.target.value === '') {
-                val[3] = ''
+                val[3] = '1'
             } else {
                 val[3] = `L-${e.target.value}`;
             }
@@ -75,7 +81,16 @@ const Monthly = (props) => {
         <Paper className={classes.root}>
             <Radio
                 className={classes.radioBtn}
-                onChange={(e) => { setEvery(e.target.value); props.onChange(['0', value[1] === '*' ? '0' : value[1], value[2] === '*' ? '0' : value[2], '1', '1/1', '?', '*']) }}
+                onChange={(e) => {
+                    setEvery(e.target.value)
+                    props.onChange(['0',
+                        value[1] === '*' ? '0' : value[1],
+                        value[2] === '*' ? '0' : value[2],
+                        '1',
+                        '1/1',
+                        '?',
+                        '*'])
+                }}
                 value="1"
                 name="MonthlyRadio"
                 checked={every === "1" ? true : false}
@@ -85,7 +100,9 @@ const Monthly = (props) => {
             <TextField
                 id="outlined-number"
                 label="Day of every month(s)"
-                value={value[3]}
+                value={!isNaN(Number(value[3])) ? value[3] : ""}
+                min={1}
+                max={30}
                 onChange={onDayChange}
                 type="number"
                 InputLabelProps={{
@@ -108,7 +125,7 @@ const Monthly = (props) => {
                     inputProps={{ 'aria-label': 'DailyRadio' }}
                 />}
                 label="Last day of every month"
-                labelPlacement="right"
+                labelPlacement="start"
             />
         </Paper>
         <Paper className={classes.secondaryPaper}>
@@ -122,7 +139,7 @@ const Monthly = (props) => {
                     inputProps={{ 'aria-label': 'DailyRadio' }}
                 />}
                 label="On the last weekday of every month"
-                labelPlacement="right"
+                labelPlacement="start"
             />
         </Paper>
         <Paper className={classes.secondaryPaper}>
@@ -137,7 +154,7 @@ const Monthly = (props) => {
             <TextField
                 id="outlined-number"
                 label="Day(s) before the end of the month"
-                value={value[3].split('-')[1]}
+                value={value[3] !== "" && value[3].split('-')[1] ? value[3].split('-')[1] : ""}
                 onChange={onLastDayChange}
                 type="number"
                 InputLabelProps={{
@@ -149,7 +166,7 @@ const Monthly = (props) => {
             />
             &nbsp;
         </Paper>
-        <Card label="Start time">
+        <Card label="HH/MM (24h)">
             <StartTime hour={value[2]} minute={value[1]} onAtMinuteChange={onAtMinuteChange} onAtHourChange={onAtHourChange} />
         </Card>
     </div>)
