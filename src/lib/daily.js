@@ -69,7 +69,7 @@ const Daily = (props) => {
             <TextField
                 id="outlined-number"
                 label="Every day(s)"
-                value={value[3].split('/')[1] ? value[3].split('/')[1] : ''}
+                value={value[3].split('/')[1] ? value[3].split('/')[1] : '1'}
                 onChange={onDayChange}
                 type="number"
                 InputLabelProps={{

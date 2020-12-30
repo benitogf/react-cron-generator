@@ -30,7 +30,7 @@ const Hourly = (props) => {
         if (((e.target.value > 0 && e.target.value < 24) || e.target.value === '')) {
             let val = ['0', '0', '*', '*', '*', '?', '*'];
             if (e.target.value === '') {
-                val[2] = '';
+                val[2] = '0/1';
             } else {
                 val[2] = `0/${e.target.value}`;
             }

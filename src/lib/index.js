@@ -129,11 +129,15 @@ const Cron = (props) => {
     }
 
     const getVal = () => {
-        let val = cronstrue.toString(value.toString().replace(/,/g, ' ').replace(/!/g, ','))
-        if (val.search('undefined') === -1) {
-            return val;
+        let val = '-'
+        try {
+            val = cronstrue.toString(value.toString().replace(/,/g, ' ').replace(/!/g, ','))
+            if (val.search('undefined') === -1) {
+                return val;
+            }
+        } finally {
+            return val
         }
-        return '-'
     }
 
     const getComponent = (tab) => {
